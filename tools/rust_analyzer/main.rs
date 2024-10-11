@@ -66,6 +66,11 @@ fn parse_config() -> anyhow::Result<Config> {
 
     // We need some info from `bazel info`. Fetch it now.
     let mut bazel_info_command = Command::new(&config.bazel);
+
+    if let Some(output_base) = &config.output_base {
+        bazel_info_command.arg(format!("--output_base={}", output_base));
+    }
+
     bazel_info_command
         .env_remove("BAZELISK_SKIP_WRAPPER")
         .env_remove("BUILD_WORKING_DIRECTORY")
