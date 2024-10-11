@@ -36,6 +36,7 @@ fn main() -> anyhow::Result<()> {
     // Generate the crate specs.
     generate_crate_info(
         &config.bazel,
+        output_base,
         workspace_root,
         rules_rust_name,
         &config.targets,
