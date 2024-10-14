@@ -68,7 +68,7 @@ fn parse_config() -> anyhow::Result<Config> {
     let mut bazel_info_command = Command::new(&config.bazel);
 
     if let Some(output_base) = &config.output_base {
-        bazel_info_command.arg(format!("--output_base={}", output_base));
+        bazel_info_command.arg(format!("--output_base={}", output_base.display()));
     }
 
     bazel_info_command
