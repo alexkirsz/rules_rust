@@ -3,6 +3,7 @@
 ProstProtoInfo = provider(
     doc = "Rust Prost provider info",
     fields = {
+        "providers": "List[Provider]: Providers for the underlying Rust library.",
         "dep_variant_info": "DepVariantInfo: For the compiled Rust gencode (also covers its " +
                             "transitive dependencies)",
         "package_info": "File: A newline delimited file of `--extern_path` values for protoc.",

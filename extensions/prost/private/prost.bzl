@@ -217,12 +217,12 @@ def _compile_rust(
     dep_info = _get_dep_info(providers)
     cc_info = _get_cc_info(providers)
 
-    return rust_common.dep_variant_info(
+    return (providers, rust_common.dep_variant_info(
         crate_info = crate_info,
         dep_info = dep_info,
         cc_info = cc_info,
         build_info = None,
-    )
+    ))
 
 def _rust_prost_aspect_impl(target, ctx):
     if ProstProtoInfo in target:
@@ -286,7 +286,7 @@ def _rust_prost_aspect_impl(target, ctx):
         rustfmt_toolchain = rustfmt_toolchain,
     )
 
-    dep_variant_info = _compile_rust(
+    providers, dep_variant_info = _compile_rust(
         ctx = ctx,
         attr = ctx.rule.attr,
         crate_name = crate_name,
@@ -319,6 +319,7 @@ def _rust_prost_aspect_impl(target, ctx):
 
     return [
         ProstProtoInfo(
+            providers = providers,
             dep_variant_info = dep_variant_info,
             transitive_dep_infos = depset(transitive = transitive_deps),
             package_info = package_info_file,
@@ -375,8 +376,7 @@ def _rust_prost_library_impl(ctx):
     if prost_toolchain.include_transitive_deps:
         transitive = [rust_proto_info.transitive_dep_infos]
 
-    return [
-        DefaultInfo(files = depset([dep_variant_info.crate_info.output])),
+    return rust_proto_info.providers + [
         rust_common.crate_group_info(
             dep_variant_infos = depset(
                 [dep_variant_info],
